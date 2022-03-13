@@ -6,3 +6,7 @@
     padding: 12px 8px 12px 20px;
     min-height: fit-content;
 }
+
+.mosha__toast__progress {
+    margin-left: -20px;
+}

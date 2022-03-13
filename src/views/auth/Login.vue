@@ -55,7 +55,7 @@ export default {
       // this.$swal("Login");
       createToast({ title: "Login" }, {
         type: "success",
-        timeout: -1,
+        timeout: 1500,
         transition: "zoom"
       });
     }
