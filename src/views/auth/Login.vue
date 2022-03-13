@@ -1,7 +1,9 @@
 <template>
   <div>
-    <img class="mx-auto h-12 w-auto" src="../../assets/box.png"
-         alt="Workflow" />
+    <router-link :to="{name: 'home'}">
+      <img class="mx-auto h-12 w-auto" src="../../assets/box.png"
+           alt="Workflow" />
+    </router-link>
     <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Log in to your account</h2>
     <p class="mt-2 text-center text-sm text-gray-600">
       Or
@@ -10,7 +12,7 @@
       </router-link>
     </p>
   </div>
-  <form class="mt-8 space-y-6" action="#" method="POST">
+  <form class="mt-8 space-y-6" @submit.prevent="login">
     <input type="hidden" name="remember" value="true" />
     <div class="rounded-md shadow-sm -space-y-px">
       <div>
@@ -46,6 +48,12 @@ export default {
   name: "Login",
   components: {
     LockClosedIcon
+  },
+  methods: {
+    login() {
+      this.$swal("Login");
+      // this.$toast.open("Login!");
+    }
   }
 };
 </script>

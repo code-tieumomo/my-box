@@ -1,7 +1,9 @@
 <template>
   <div>
-    <img class="mx-auto h-12 w-auto" src="../../assets/box.png"
-         alt="Workflow" />
+    <router-link :to="{name: 'home'}">
+      <img class="mx-auto h-12 w-auto" src="../../assets/box.png"
+           alt="Workflow" />
+    </router-link>
     <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Register new account</h2>
     <p class="mt-2 text-center text-sm text-gray-600">
       Or
@@ -22,7 +24,7 @@
       <div>
         <label for="password" class="sr-only">Password</label>
         <input id="password" name="password" type="password" autocomplete="current-password" required=""
-               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                placeholder="Password" />
       </div>
       <div>

@@ -5,4 +5,10 @@ import App from "./App.vue";
 
 import "./assets/styles/global.css";
 
-createApp(App).use(store).use(router).mount("#app");
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
+
+import VueToast from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+
+createApp(App).use(store).use(router).use(VueSweetalert2).use(VueToast).mount("#app");
