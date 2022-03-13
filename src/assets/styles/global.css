@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.mosha__toast {
+    padding: 12px 8px 12px 20px;
+    min-height: fit-content;
+}

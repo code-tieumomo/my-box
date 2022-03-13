@@ -43,6 +43,7 @@
 
 <script>
 import { LockClosedIcon } from "@heroicons/vue/solid";
+import { createToast } from "mosha-vue-toastify";
 
 export default {
   name: "Login",
@@ -51,8 +52,12 @@ export default {
   },
   methods: {
     login() {
-      this.$swal("Login");
-      // this.$toast.open("Login!");
+      // this.$swal("Login");
+      createToast({ title: "Login" }, {
+        type: "success",
+        timeout: -1,
+        transition: "zoom"
+      });
     }
   }
 };
