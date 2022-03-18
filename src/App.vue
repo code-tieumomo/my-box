@@ -2,14 +2,14 @@
 import { createToast } from "mosha-vue-toastify";
 
 export default {
-  mounted() {
+  created() {
     fetch(`${ import.meta.env.VITE_API_ENDPOINT }`).then(res => res.json()).then(res => {
       createToast({
         title: "Success",
-        description: `Name: ${ res.name }<br>Logo: ${ res.logo }`
+        description: `Connected to API endpoint<br>Name: ${ res.name }<br>Logo: ${ res.logo }`
       }, {
         type: "success",
-        timeout: 5000,
+        timeout: 3000,
         transition: "zoom"
       });
     });

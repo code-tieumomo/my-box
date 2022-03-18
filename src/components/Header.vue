@@ -60,7 +60,7 @@
                      :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
                 </MenuItem>
                 <MenuItem v-slot="{ active }">
-                  <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign
+                  <a @click="logout" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign
                     out</a>
                 </MenuItem>
               </MenuItems>
@@ -84,6 +84,7 @@
 <script>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
+import store from "../store";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
@@ -110,6 +111,24 @@ export default {
     return {
       navigation
     };
+  },
+  methods: {
+    logout() {
+      store
+          .dispatch("logout")
+          .then(() => {
+            this.$router.push({
+              name: "login"
+            });
+          })
+          .catch(error => {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: error.response.data.message
+            });
+          });
+    }
   }
 };
 </script>

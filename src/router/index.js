@@ -3,6 +3,7 @@ import AuthLayout from "../views/layouts/AuthLayout.vue";
 import Login from "../views/auth/Login.vue";
 import Register from "../views/auth/Register.vue";
 import AppLayout from "../views/layouts/AppLayout.vue";
+import Dashboard from "../views/Dashboard.vue";
 import store from "../store";
 
 const routes = [
@@ -12,7 +13,14 @@ const routes = [
     meta: { requiresAuth: true },
     component: AppLayout,
     children: [
-      { path: "/dashboard", name: "Dashboard" }
+      {
+        path: "/dashboard",
+        name: "dashboard",
+        component: Dashboard,
+        meta: {
+          title: "Dashboard | MyBox"
+        }
+      }
     ]
   },
   {

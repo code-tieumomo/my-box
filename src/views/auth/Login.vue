@@ -19,13 +19,13 @@
         <label for="email-address" class="sr-only">Email address</label>
         <input id="email-address" name="email" type="email" autocomplete="email" required=""
                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-               placeholder="Email address" />
+               placeholder="Email address" v-model="user.email" />
       </div>
       <div>
         <label for="password" class="sr-only">Password</label>
         <input id="password" name="password" type="password" autocomplete="current-password" required=""
                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-               placeholder="Password" />
+               placeholder="Password" v-model="user.password" />
       </div>
     </div>
 
@@ -43,21 +43,37 @@
 
 <script>
 import { LockClosedIcon } from "@heroicons/vue/solid";
-import { createToast } from "mosha-vue-toastify";
+import store from "../../store";
 
 export default {
   name: "Login",
   components: {
     LockClosedIcon
   },
+  data() {
+    return {
+      user: {
+        email: "",
+        password: ""
+      }
+    };
+  },
   methods: {
     login() {
-      // this.$swal("Login");
-      createToast({ title: "Login" }, {
-        type: "success",
-        timeout: 1500,
-        transition: "zoom"
-      });
+      store
+          .dispatch("login", this.user)
+          .then(() => {
+            this.$router.push({
+              name: "dashboard"
+            });
+          })
+          .catch(error => {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: error.response.data.message
+            });
+          });
     }
   }
 };
