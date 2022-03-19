@@ -5,6 +5,8 @@ import Register from "../views/auth/Register.vue";
 import AppLayout from "../views/layouts/AppLayout.vue";
 import Dashboard from "../views/Dashboard.vue";
 import store from "../store";
+import Calendar from "../views/Calendar.vue";
+import Profile from "../views/Profile.vue";
 
 const routes = [
   {
@@ -19,6 +21,22 @@ const routes = [
         component: Dashboard,
         meta: {
           title: "Dashboard | MyBox"
+        }
+      },
+      {
+        path: "/profile",
+        name: "profile",
+        component: Profile,
+        meta: {
+          title: "Profile | MyBox"
+        }
+      },
+      {
+        path: "/calendar",
+        name: "calendar",
+        component: Calendar,
+        meta: {
+          title: "Calendar | MyBox"
         }
       }
     ]
@@ -54,7 +72,9 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  linkActiveClass: "active",
+  linkExactActiveClass: "exact-active"
 });
 
 router.beforeEach((to, from, next) => {

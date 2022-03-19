@@ -1,14 +1,20 @@
 import { createStore } from "vuex";
 import axiosClient from "../../axios";
+import createPersistedState from "vuex-persistedstate";
 
 const store = createStore({
+  plugins: [createPersistedState()],
   state: {
     user: {
-      data: {},
+      data: null,
       token: sessionStorage.getItem("TOKEN")
     }
   },
-  getters: {},
+  getters: {
+    getUser(state) {
+      return state.user;
+    }
+  },
   actions: {
     register({ commit }, user) {
       return axiosClient.post("/api/register", user)
@@ -33,6 +39,14 @@ const store = createStore({
 
             return data;
           });
+    },
+    getUser({ commit }) {
+      return axiosClient.get("/api/user")
+          .then(({ data }) => {
+            commit("setUserOnly", data);
+
+            return data;
+          });
     }
   },
   mutations: {
@@ -45,6 +59,9 @@ const store = createStore({
       state.user.token = null;
       state.user.token = null;
       sessionStorage.removeItem("TOKEN");
+    },
+    setUserOnly: (state, user) => {
+      state.user.data = user;
     }
   },
   modules: {}

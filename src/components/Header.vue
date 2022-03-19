@@ -19,10 +19,12 @@
                  src="../assets/box.png" alt="Workflow" />
           </div>
           <div class="hidden sm:block sm:ml-6">
-            <div class="flex space-x-4">
-              <a v-for="item in navigation" :key="item.name" :href="item.href"
-                 :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']"
-                 :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+            <div class="navbar flex space-x-4">
+              <router-link v-for="item in navigation" :key="item.name" :to="{name: item.routerName}"
+                           :class="['text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']"
+                           :aria-current="item.current ? 'page' : undefined">
+                {{ item.name }}
+              </router-link>
             </div>
           </div>
         </div>
@@ -52,8 +54,10 @@
               <MenuItems
                   class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <MenuItem v-slot="{ active }">
-                  <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your
-                    Profile</a>
+                  <router-link :to="{name: 'profile'}"
+                               :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                    Your Profile
+                  </router-link>
                 </MenuItem>
                 <MenuItem v-slot="{ active }">
                   <a href="#"
@@ -72,10 +76,10 @@
 
     <DisclosurePanel class="sm:hidden">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href"
-                          :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']"
-                          :aria-current="item.current ? 'page' : undefined">{{ item.name }}
-        </DisclosureButton>
+        <router-link v-for="item in navigation" :key="item.name" :to="{name: item.routerName}"
+                     :class="['text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']"
+                     :aria-current="item.current ? 'page' : undefined">{{ item.name }}
+        </router-link>
       </div>
     </DisclosurePanel>
   </Disclosure>
@@ -85,13 +89,6 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
 import store from "../store";
-
-const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false }
-];
 
 export default {
   name: "Header",
@@ -107,10 +104,23 @@ export default {
     MenuIcon,
     XIcon
   },
-  setup() {
+  data() {
     return {
-      navigation
+      navigation: []
     };
+  },
+  mounted() {
+    const currentRouteName = this.$route.name;
+    this.navigation = [
+      { name: "Dashboard", routerName: "dashboard", current: true },
+      // { name: "Team", href: "#", current: false },
+      // { name: "Projects", href: "#", current: false },
+      { name: "Calendar", routerName: "calendar", current: false }
+    ].map(function (item) {
+      item.current = item.routerName === currentRouteName;
+
+      return item;
+    });
   },
   methods: {
     logout() {
