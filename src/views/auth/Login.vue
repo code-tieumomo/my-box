@@ -31,12 +31,10 @@
 
     <div>
       <button type="submit"
-              class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-              <LockClosedIcon class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
-            </span>
-        Log in
-      </button>
+              class="group relative w-full flex items-center justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              v-html="isLoggingIn ? 'Logging In <i class=\'ml-2 align-middle fa-solid fa-spinner fa-pulse\'></i>' : 'Login'"
+              :disabled="isLoggingIn"
+      ></button>
     </div>
   </form>
 </template>
@@ -55,19 +53,23 @@ export default {
       user: {
         email: "",
         password: ""
-      }
+      },
+      isLoggingIn: false
     };
   },
   methods: {
     login() {
+      this.isLoggingIn = true;
       store
           .dispatch("login", this.user)
           .then(() => {
+            this.isLoggingIn = false;
             this.$router.push({
               name: "dashboard"
             });
           })
           .catch(error => {
+            this.isLoggingIn = false;
             this.$swal({
               icon: "error",
               title: "Oops...",

@@ -36,7 +36,7 @@
           </button>
 
           <!-- Profile dropdown -->
-          <Menu as="div" class="ml-3 relative">
+          <Menu as="div" class="ml-3 relative z-50">
             <div>
               <MenuButton
                   class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
@@ -83,6 +83,11 @@
       </div>
     </DisclosurePanel>
   </Disclosure>
+
+  <div v-if="isLoggingOut"
+       class="overlay fixed w-full h-full top-0 left-0 bottom-0 right-0 z-10 cursor-pointer select-none flex justify-center items-center">
+    <img class="h-20 w-20 opacity-100 fa-pulse fa-pulse" src="../assets/box.png" alt="Logo">
+  </div>
 </template>
 
 <script>
@@ -108,7 +113,8 @@ export default {
   data() {
     return {
       navigation: [],
-      user: store.getters.getUser
+      user: store.getters.getUser,
+      isLoggingOut: false
     };
   },
   mounted() {
@@ -124,12 +130,14 @@ export default {
   },
   methods: {
     logout() {
+      this.isLoggingOut = true;
       store
           .dispatch("logout")
           .then(() => {
             this.$router.push({
               name: "login"
             });
+            this.isLoggingOut = false;
           })
           .catch(error => {
             this.$swal({
@@ -137,6 +145,7 @@ export default {
               title: "Oops...",
               text: error.response.data.message
             });
+            this.isLoggingOut = false;
           });
     }
   }

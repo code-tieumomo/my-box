@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    min-width: 320px;
+}
+
 button:disabled {
     cursor: not-allowed;
+}
+
+a {
+    cursor: pointer;
 }
 
 .mosha__toast {
@@ -20,4 +28,30 @@ button:disabled {
     background-color: rgb(17 24 39 / var(--tw-bg-opacity));
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.vfm__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vfm__content {
+    width: 100%;
+}
+
+@media screen and (min-width: 640px) {
+    .vfm__content {
+        width: 75%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .vfm__content {
+        width: 60%;
+    }
 }

@@ -89,7 +89,77 @@
               <button type="submit"
                       class="flex items-center justify-center ml-auto mr-0 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       :disabled="isSaving"
-                      v-html="isSaving ? 'Saving <i class=\'ml-2 align-middle fa-solid fa-spinner  fa-pulse\'></i>' : 'Save'">
+                      v-html="isSaving ? 'Saving <i class=\'ml-2 align-middle fa-solid fa-spinner fa-pulse\'></i>' : 'Save'">
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div aria-hidden="true">
+    <div class="py-5">
+      <div class="border-t border-gray-200" />
+    </div>
+  </div>
+
+  <div>
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+      <div class="md:col-span-1">
+        <div class="px-4 sm:px-0">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">Password</h3>
+          <p class="mt-1 text-sm text-gray-600">Do not share your password with anyone!</p>
+        </div>
+      </div>
+      <div class="mt-5 md:mt-0 md:col-span-2">
+        <form @submit.prevent="changePassword">
+          <div class="shadow sm:rounded-md sm:overflow-hidden">
+            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+              <div class="grid grid-cols-3 gap-6">
+                <div class="col-span-3">
+                  <label class="sm:hidden block text-sm font-medium text-gray-700">Current password</label>
+                  <div class="mt-1 flex rounded-md shadow-sm">
+                    <span
+                        class="hidden sm:inline-flex min-w-[200px] items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">Current password</span>
+                    <input type="password" name="current-password" id="current-password"
+                           class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full sm:rounded-none rounded-l-md sm:rounded-r-md rounded-r-md sm:text-sm border-gray-300"
+                           placeholder="********" v-model="password.current_password" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-3 gap-6">
+                <div class="col-span-3">
+                  <label class="sm:hidden block text-sm font-medium text-gray-700">New password</label>
+                  <div class="mt-1 flex rounded-md shadow-sm">
+                    <span
+                        class="hidden sm:inline-flex min-w-[200px] items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">New password</span>
+                    <input type="password" name="new-password" id="new-password"
+                           class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full sm:rounded-none rounded-l-md sm:rounded-r-md rounded-r-md sm:text-sm border-gray-300"
+                           placeholder="********" v-model="password.new_password" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-3 gap-6">
+                <div class="col-span-3">
+                  <label class="sm:hidden block text-sm font-medium text-gray-700">New password confirmation</label>
+                  <div class="mt-1 flex rounded-md shadow-sm">
+                    <span
+                        class="hidden sm:inline-flex min-w-[200px] items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">New password confirmation</span>
+                    <input type="password" name="new-password-confirmation" id="new-password-confirmation"
+                           class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full sm:rounded-none rounded-l-md sm:rounded-r-md rounded-r-md sm:text-sm border-gray-300"
+                           placeholder="********" v-model="password.new_password_confirmation" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+              <button type="submit"
+                      class="flex items-center justify-center ml-auto mr-0 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      :disabled="isSaving"
+                      v-html="isSaving ? 'Saving <i class=\'ml-2 align-middle fa-solid fa-spinner fa-pulse\'></i>' : 'Save'">
               </button>
             </div>
           </div>
@@ -110,7 +180,12 @@ export default {
       user: store.getters.getUser,
       previewAvatar: store.getters.getUser.data.avatar,
       changedAvatar: null,
-      isSaving: false
+      isSaving: false,
+      password: {
+        current_password: "",
+        new_password: "",
+        new_password_confirmation: ""
+      }
     };
   },
   methods: {
@@ -146,7 +221,7 @@ export default {
               description: "Updated profile"
             }, {
               type: "success",
-              timeout: 1500,
+              timeout: 1000,
               transition: "zoom"
             });
           })
@@ -155,6 +230,43 @@ export default {
               icon: "error",
               title: "Oops...",
               text: err.response.data.message
+            });
+          })
+          .finally(() => {
+            this.isSaving = false;
+          });
+    },
+    resetPasswordForm() {
+      this.password.current_password = "";
+      this.password.new_password = "";
+      this.password.new_password_confirmation = "";
+    },
+    changePassword() {
+      this.isSaving = true;
+
+      let formData = new FormData();
+      formData.append("current_password", this.password.current_password);
+      formData.append("new_password", this.password.new_password);
+      formData.append("new_password_confirmation", this.password.new_password_confirmation);
+
+      store
+          .dispatch("changePassword", formData)
+          .then((res) => {
+            createToast({
+              title: "Success",
+              description: "Updated profile"
+            }, {
+              type: "success",
+              timeout: 1000,
+              transition: "zoom"
+            });
+            this.resetPasswordForm();
+          })
+          .catch(error => {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: error.response.data.message
             });
           })
           .finally(() => {

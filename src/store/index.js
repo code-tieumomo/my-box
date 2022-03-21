@@ -8,11 +8,20 @@ const store = createStore({
     user: {
       data: null,
       token: sessionStorage.getItem("TOKEN")
-    }
+    },
+    events: null,
+    currentSession: {
+      events: null,
+      event: null
+    },
+    settings: null
   },
   getters: {
     getUser(state) {
       return state.user;
+    },
+    getEvents(state) {
+      return state.events;
     }
   },
   actions: {
@@ -55,6 +64,22 @@ const store = createStore({
 
             return data;
           });
+    },
+    changePassword({ commit }, data) {
+      return axiosClient.post("user/change-password", data)
+          .then(({ data }) => {
+            return {
+              message: "Updated success"
+            };
+          });
+    },
+    getEvents({ commit }) {
+      return axiosClient.get("events")
+          .then(({ data }) => {
+            commit("setEvents", data.events);
+
+            return data;
+          });
     }
   },
   mutations: {
@@ -70,6 +95,11 @@ const store = createStore({
     },
     setUserData: (state, user) => {
       state.user.data = user;
+      state.user.data.avatar = user.avatar + "?" + new Date().getTime();
+    },
+    setEvents: (state, events) => {
+      state.events = events;
+      state.currentSession.events = events;
     }
   },
   modules: {}
